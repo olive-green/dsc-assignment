@@ -7,6 +7,7 @@ const bodyparser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const Posts=require("./models/posts");
+const methodOverride=require("method-override")
 require("dotenv").config();
 const authRoutes=require("./routes/auth-routes");
 const postRoutes=require("./routes/post-routes");
@@ -27,11 +28,9 @@ app.set("view engine","ejs");
 app.use(express.static("public"))
 // using Bodyparser for getting form data
 app.use(bodyparser.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 
-//routes
-app.use(authRoutes);
-app.use("/post",postRoutes);
 
 // using cookie-parser and session 
 app.use(cookieParser('secret'));
@@ -69,13 +68,17 @@ const checkAuthenticated = function (req, res, next) {
 
 
 
-app.get("/",(req,res)=>{
-    // const posts=await Posts.find();
+app.get("/",checkAuthenticated,async (req,res)=>{
+    const posts=await Posts.find();
     let cssFile="index.css";
     let pageTitle="Home | Twitter";
-    res.render("index",{user : req.user,cssFile,pageTitle});
+    res.render("index",{user : req.user,cssFile,pageTitle,posts});
 })
 
+
+//routes
+app.use(authRoutes);
+app.use("/post",postRoutes);
 
 app.listen(port,()=>{
     console.log(`Server is listening on ${port}`)

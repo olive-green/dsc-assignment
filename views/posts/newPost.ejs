@@ -5,19 +5,19 @@
 
         <legend class="uk-legend">What's happeninig?</legend>
 
-        <input type="hidden" value="" />
-        <input type="hidden" value="" />
+        <input type="hidden" value="<%= user.username %>" name="author" />
+        <input type="hidden" value="<%= user.id %>" name="userId"/>
      
 
         <div class="uk-margin">
-            <input class="uk-input" type="text" placeholder="Title">
+            <input class="uk-input" type="text" name="title" placeholder="Title">
         </div>
          
         <div class="uk-margin">
-            <textarea class="uk-textarea" rows="5" placeholder="Content"></textarea>
+            <textarea class="uk-textarea" name="description" rows="5" placeholder="Content"></textarea>
         </div>
         <div class="uk-margin">
-            <input class="uk-input" type="text" placeholder="Add an image url">
+            <input class="uk-input" type="text" name="image" placeholder="Add an image url">
         </div>
         
         <button type="submit" class="uk-button uk-button-primary">Tweet</button>

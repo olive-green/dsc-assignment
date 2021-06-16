@@ -11,10 +11,12 @@
     grid-gap:20px;
     padding:10px;
 }
+.section .left-section .like:active i{
+    color: red;
+}
 
 @media (min-width: 960px){
-
-    .uk-width-1-2\@m {
-    width: 80%;
+.cards {
+    width: 80% !important;
 }
 }

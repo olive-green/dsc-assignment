@@ -65,11 +65,11 @@ router.post('/register', (req, res) => {
                                 password,
                             }).save()
                             .then(data => {
-                                // req.flash('success_message', "Registered Successfully.. Login To Continue..");
+                                req.flash('success_message', "Registered Successfully.. Login To Continue..");
                                 res.redirect('login');
                             })
                             .catch(err=>console.log(err));
-                        });
+                        });  
                     });
                 }
             })

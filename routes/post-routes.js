@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const user = require('../models/user.js');
 const Post = require('../models/posts.js');
 
+
 router.get("/newPost",(req,res)=>{
     let cssFile="newPost.css";
     let pageTitle="Home | NewPost";
-    res.render("posts/newPost",{cssFile,pageTitle});
+    res.render("posts/newPost",{cssFile,pageTitle,user:req.user});
 })
 
 
@@ -14,20 +15,20 @@ router.get("/newPost",(req,res)=>{
 router.post('/save',async (req,res,next)=>{
     req.post= new Post();
     next();
-},saveArticleAndRedirect("newPost"))
+},savePostAndRedirect("newPost"))
 
 router.put('/:id',async (req,res,next)=>{
     req.post= await Post.findById(req.params.id);
     next()
-},saveArticleAndRedirect('edit'))
+},savePostAndRedirect('edit'))
 
 
-function saveArticleAndRedirect(path){
+function savePostAndRedirect(path){
     return async (req,res)=>{
         let post= req.post
             post.author=req.user.username
             post.email=req.user.email
-            post.profileImg=req.user.profileImg
+            // post.profileImg=req.user.profileImg
             post.title=req.body.title
             post.description=req.body.description
             post.image=req.body.image
@@ -67,6 +68,13 @@ router.get('/edit/:id', async (req,res)=>{
 router.delete('/:id',async (req,res)=>{
     await Post.findByIdAndDelete(req.params.id)
     res.redirect('/')
+})
+
+router.put("/:id/likeCounts",async (req,res)=>{
+    let post=await Post.findById(req.params.id);
+    let isLiked=await User.findOne({email:req.email})
+    if(req.user.likedPosts[req.params.id])
+    
 })
 
 module.exports=router;
