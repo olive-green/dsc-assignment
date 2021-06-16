@@ -68,18 +68,18 @@ const checkAuthenticated = function (req, res, next) {
 
 
 
-
+// Home Route
 app.get("/",checkAuthenticated,async (req,res)=>{
 
     const user=await User.find({"_id":req.user.id});
     
-    
+    //here we are getting the loggedin user's following list
     let following=user[0].following || [];
     following.push(req.user.id);
-
+    //here we fetching  posts of those users which are followed by logged in user 
     const posts=await Posts.find({"authorId":{$in:following}});
     
-
+    // Here we are checking on which post loggedin user had liked.
     for(let i=0;i<posts.length;i++){
         let likedusers=posts[i].likers;
         let like=false;
@@ -90,7 +90,7 @@ app.get("/",checkAuthenticated,async (req,res)=>{
     }
     
     
-  
+    //here we are fetching all those users who are not followed by loggedin user
     const users=await User.find({"_id":{$nin:following}});
     
 
@@ -99,8 +99,8 @@ app.get("/",checkAuthenticated,async (req,res)=>{
     res.render("index",{user : req.user,cssFile,pageTitle,posts,users});
 })
 
-
-app.use('/follow/:id',(req,res)=>{
+//route for following user
+app.post('/follow/:id',(req,res)=>{
      
     User.updateOne({
         "_id":req.user.id
@@ -111,7 +111,7 @@ app.use('/follow/:id',(req,res)=>{
            following:req.params.id
        }
 },(err,data)=>{
-   console.log("follwed");
+   console.log("followed");
 })
 
 

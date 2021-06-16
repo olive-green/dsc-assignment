@@ -4,7 +4,17 @@ const user = require('../models/user.js');
 const Post = require('../models/posts.js');
 
 
-router.get("/newPost",(req,res)=>{
+//middleware for checking authenticated user
+const checkAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
+
+router.get("/newPost",checkAuthenticated,(req,res)=>{
     let cssFile="newPost.css";
     let pageTitle="Home | NewPost";
     res.render("posts/newPost",{cssFile,pageTitle,user:req.user});
@@ -12,12 +22,12 @@ router.get("/newPost",(req,res)=>{
 
 
 
-router.post('/save',async (req,res,next)=>{
+router.post('/save',checkAuthenticated,async (req,res,next)=>{
     req.post= new Post();
     next();
 },savePostAndRedirect("newPost"))
 
-router.put('/:id',async (req,res,next)=>{
+router.put('/:id',checkAuthenticated,async (req,res,next)=>{
     req.post= await Post.findById(req.params.id);
     next()
 },savePostAndRedirect('edit'))
@@ -46,7 +56,7 @@ function savePostAndRedirect(path){
 }
 
 
-router.get('/:id', async (req, res) => {
+router.get('/:id',checkAuthenticated, async (req, res) => {
     let cssFile = "";
     let pageTitle = req.user.username + "| Posts";
     // res.send(req.params.id);
@@ -59,46 +69,45 @@ router.get('/:id', async (req, res) => {
       res.render('posts/show',{post,pageTitle,cssFile,user:req.user});  
 })
 
-router.get('/edit/:id', async (req,res)=>{
+router.get('/edit/:id',checkAuthenticated, async (req,res)=>{
     // res.send(req.params.id);
     let post= await Post.findById(req.params.id);
    res.render('posts/edit',{post,user:req.user});  
 })
 
 
-router.delete('/:id',async (req,res)=>{
+router.delete('/:id',checkAuthenticated,async (req,res)=>{
     await Post.findByIdAndDelete(req.params.id)
     res.redirect('/')
 })
 
-router.post("/:id/likeCounts",async (req,res)=>{
+router.post("/:id/likeCounts",checkAuthenticated,async (req,res)=>{
     
     let post=await Post.findById(req.params.id);
     let likedusers=post.likers;
     
 
-//check if user already liked the post
- if(likedusers.find((user)=>user==req.user.id)){
-      console.log("you have already liked");
-      return;
-  }
+    //check if user already liked the post
+    if(likedusers.find((user)=>user==req.user.id)){
+        console.log("you have already liked");
+        return;
+    }
 
 
-// likedusers.push(req.user.id);
 
-Post.updateOne({
-                 "_id":req.params.id
-           } 
-           ,
-           {
-            $push:{
-                    likers:req.user.id
-                }
-        },(err,data)=>{
-            console.log(data);
-        })
+    Post.updateOne({
+                    "_id":req.params.id
+            } 
+            ,
+            {
+                $push:{
+                        likers:req.user.id
+                    }
+            },(err,data)=>{
+                console.log(data);
+            })
 
-    
+        
 });
 
 module.exports=router;
