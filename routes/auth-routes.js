@@ -26,22 +26,22 @@ router.get('/login',isLoggedIn,(req, res) => {
 });
 
 router.post('/register', (req, res) => {
-    var { email, username, password, confirmpassword } = req.body;
+    var { email,name, username, password, confirmpassword } = req.body;
     console.log(email, "user: ",username,"password : ",password,confirmpassword);
     var err;
     //to check for blank spaces
-    if (email.trim()=="" || username.trim()=="" || password.trim()=="" || confirmpassword.trim()=="") {
+    if (email.trim()=="" || username.trim()=="" || name.trim()=="" || password.trim()=="" || confirmpassword.trim()=="") {
         err = "Blanck Spaces are not allowed..";
         res.render('register', { err });
     }
 
     if (password.trim().length<6) {
         err = "Password too short...";
-        res.render('register', {err,email,username});
+        res.render('register', {err,email,name,username});
     }
     if (password != confirmpassword) {
         err = "Passwords Don't Match";
-        res.render('register', { err, email, username });
+        res.render('register', { err, email, name,username });
     }
     if (typeof err == 'undefined') {
        user.findOne({ email: email })
@@ -50,7 +50,7 @@ router.post('/register', (req, res) => {
                  console.log("User Exists");
                  console.log(data);
                  err = "User Already Exists With This Email...";
-                 res.render('register', {err, email, username });
+                 res.render('register', {err, email,name, username });
                 } 
             else {
                     bcrypt.genSalt(10, (err, salt) => {
@@ -61,6 +61,7 @@ router.post('/register', (req, res) => {
                             //saving the new user in database
                             user({
                                 email,
+                                name,
                                 username,
                                 password,
                             }).save()

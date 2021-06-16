@@ -42,6 +42,11 @@
                                 autocomplete="off" placeholder="Email" value="<%= typeof email !='undefined' ? email : '' %>" required>
                         </div>
                         <div class="mb-3">
+                            <label for="username">Enter your Name</label>
+                            <input type="text" class="form-control form-control-lg" name="name" id="naem"
+                                autocomplete="off" placeholder="Name" value="<%= typeof name!='undefined' ? name : '' %>" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="username">Choose A Username</label>
                             <input type="text" class="form-control form-control-lg" name="username" id="username"
                                 autocomplete="off" placeholder="Username" value="<%= typeof username!='undefined' ? username : '' %>" required>

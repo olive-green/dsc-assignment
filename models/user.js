@@ -9,16 +9,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    email: {
+    email:{
         type: String,
         required: true,
     },
     password: {
         type: String,
     },
-    likedPosts:{
-        type: String,
-        value:[String]
+    following:{
+        type: Array,
+        default:[]
     }
 });
 

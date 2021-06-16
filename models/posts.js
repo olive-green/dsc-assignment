@@ -5,6 +5,10 @@ const postSchema= new mongoose.Schema({
         type:String,
         required:true
     },
+    authorId:{
+        type:String,
+        required:true
+    },
     email:{
         type:String,
         required:true
@@ -26,6 +30,10 @@ const postSchema= new mongoose.Schema({
     },
     likes_counts:{
         type:Number
+    },
+    likers:{
+        type:Array,
+        default:[]
     }
 })
 

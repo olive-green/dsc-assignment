@@ -7,6 +7,7 @@ const bodyparser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const Posts=require("./models/posts");
+const User=require("./models/user");
 const methodOverride=require("method-override")
 require("dotenv").config();
 const authRoutes=require("./routes/auth-routes");
@@ -69,11 +70,54 @@ const checkAuthenticated = function (req, res, next) {
 
 
 app.get("/",checkAuthenticated,async (req,res)=>{
-    const posts=await Posts.find();
+
+    const user=await User.find({"_id":req.user.id});
+    
+    
+    let following=user[0].following || [];
+    following.push(req.user.id);
+
+    const posts=await Posts.find({"authorId":{$in:following}});
+    
+
+    for(let i=0;i<posts.length;i++){
+        let likedusers=posts[i].likers;
+        let like=false;
+        if(likedusers.find((user)=>user==req.user.id)){
+            like=true;
+        }
+        posts[i].like=like;
+    }
+    
+    
+  
+    const users=await User.find({"_id":{$nin:following}});
+    
+
     let cssFile="index.css";
     let pageTitle="Home | Twitter";
-    res.render("index",{user : req.user,cssFile,pageTitle,posts});
+    res.render("index",{user : req.user,cssFile,pageTitle,posts,users});
 })
+
+
+app.use('/follow/:id',(req,res)=>{
+     
+    User.updateOne({
+        "_id":req.user.id
+  } 
+  ,
+  {
+   $push:{
+           following:req.params.id
+       }
+},(err,data)=>{
+   console.log("follwed");
+})
+
+
+});
+
+
 
 
 //routes

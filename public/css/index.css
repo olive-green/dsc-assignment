@@ -1,15 +1,26 @@
 .item1{
+    
     grid-area: left;
+    width: 200%;
+    padding-left: 50px;
 }
 .item2{
     grid-area: right;
+    padding-left: 360px;
+    
+}
+.item3{
+    grid-area: mid;
 }
 
 .section{
     display:grid;
-    grid-template-areas:"left right" ;
+    grid-template-areas:"mid left right" ;
     grid-gap:20px;
     padding:10px;
+}
+.section-heading{
+    text-align: center;
 }
 .section .left-section .like:active i{
     color: red;
@@ -17,6 +28,6 @@
 
 @media (min-width: 960px){
 .cards {
-    width: 80% !important;
+    width: 100% !important;
 }
 }

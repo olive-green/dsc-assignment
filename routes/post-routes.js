@@ -27,6 +27,7 @@ function savePostAndRedirect(path){
     return async (req,res)=>{
         let post= req.post
             post.author=req.user.username
+            post.authorId=req.user.id
             post.email=req.user.email
             // post.profileImg=req.user.profileImg
             post.title=req.body.title
@@ -70,11 +71,34 @@ router.delete('/:id',async (req,res)=>{
     res.redirect('/')
 })
 
-router.put("/:id/likeCounts",async (req,res)=>{
-    let post=await Post.findById(req.params.id);
-    let isLiked=await User.findOne({email:req.email})
-    if(req.user.likedPosts[req.params.id])
+router.post("/:id/likeCounts",async (req,res)=>{
     
-})
+    let post=await Post.findById(req.params.id);
+    let likedusers=post.likers;
+    
+
+//check if user already liked the post
+ if(likedusers.find((user)=>user==req.user.id)){
+      console.log("you have already liked");
+      return;
+  }
+
+
+// likedusers.push(req.user.id);
+
+Post.updateOne({
+                 "_id":req.params.id
+           } 
+           ,
+           {
+            $push:{
+                    likers:req.user.id
+                }
+        },(err,data)=>{
+            console.log(data);
+        })
+
+    
+});
 
 module.exports=router;

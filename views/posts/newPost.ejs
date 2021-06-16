@@ -1,9 +1,9 @@
-<%- include("../partials/header.ejs") %>
+
 
 <form action="/post/save" method="POST">
     <fieldset class="uk-fieldset">
 
-        <legend class="uk-legend">What's happeninig?</legend>
+        <legend class="uk-legend">What's happennig?</legend>
 
         <input type="hidden" value="<%= user.username %>" name="author" />
         <input type="hidden" value="<%= user.id %>" name="userId"/>
@@ -20,14 +20,12 @@
             <input class="uk-input" type="text" name="image" placeholder="Add an image url">
         </div>
         
-        <button type="submit" class="uk-button uk-button-primary">Tweet</button>
-        <a href="/" class="uk-button uk-button-danger">Cancel</a>
+        <button type="submit" class="uk-button uk-button-primary" >Tweet</button>
+        
         
 
     </fieldset>
 </form>
-
-
 
 
 <!-- <%- include("../partials/footer.ejs") %> -->
