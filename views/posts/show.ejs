@@ -1,0 +1,57 @@
+<!-- <%- include("./../partials/header") %> -->
+
+<style>
+    @media (min-width: 960px){
+
+        .uk-width-1-2\@m {
+            width: 100%;
+        }
+    }
+</style>
+
+   <div class="main-content">
+    <div class="containerr">
+
+        <div class="uk-card uk-card-default uk-width-1-2@m">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div class="uk-width-auto">
+                        <img class="uk-border-circle" width="40" height="40" src="<%= post.profileImg %>">
+                    </div>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom"><%= post.author %></h3>
+                        <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00"><%= post.createdAt.toLocaleString() %></time></p>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="uk-card-media-top">
+                <img src="<%= post.image %>" alt="">
+            </div>
+            <div class="uk-card-body">
+                <h3 class="uk-card-title"><%= post.title %></h3>
+                <p><%= post.description %></p>
+                <div style="margin-top: 60px;">
+                    <% if(post.email==user.email){ %>
+                        <a href="/post/edit/<%= post.id %>" class="uk-button uk-button-primary uk-margin-right" style="float:left;">Edit</a>
+                <form action="/post/<%= post.id %>?_method=DELETE"  method="POST">
+                    <input type="submit" class="uk-button uk-button-danger" value="Delete">
+                </form>
+                   <% } %>
+                </div>
+            </div>
+
+        </div>
+
+      
+   </div>
+
+
+
+
+
+    <!-- <%- include("./../partials/footer") %> -->
+
+
+    
+    
