@@ -3,11 +3,11 @@
 <div class="section">
 
         <div class="item1 left-section">
-            <!-- <legend class="uk-legend uk-margin-bottom">Feed</legend> -->
+
             <h1 class="uk-legend section-heading">Feed</h1>
-            <% if(!posts){ %>
-                <h3>Please follow any user to show feed</h3>
-            <% } %>
+        <% if(posts){ %>
+               
+
             <% posts.map(ele =>{  %>
 
                 <input type="hidden" id="postId" value="<%= ele.id %>">
@@ -44,7 +44,10 @@
 
 
             <% }) %>
-    
+      <% }else { %>
+      
+        <h1>Please follow any user to show feed</h1>
+        <% } %>
         </div>
     
         <div class="item2 right-section">
@@ -81,14 +84,14 @@
          let like_status=button.value;
 
          
-        if(!like_status){
+        if(like_status==="false"){
             let likesTag=document.getElementById(`${postId}_likes`);
             let likes=parseInt(likesTag.innerHTML);
          likes++;
          likesTag.innerHTML=likes;
 
          button.value=true;
-         icon.style="color:red";
+         button.children[0].style.color="red";
 
          axios.post("/post/"+ postId + "/likeCounts") 
         }
